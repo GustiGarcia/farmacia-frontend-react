@@ -1,75 +1,92 @@
-# React + TypeScript + Vite
+# Farmacia - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Interfaz web para la gestión de una farmacia, desarrollada con **React**, **TypeScript** y **Vite**. Consume la API REST del backend (NestJS) para mostrar y administrar categorías, medicamentos y empleados.
 
-Currently, two official plugins are available:
+Trabajo práctico de **Programación 3** — IES 9-023.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Autores
 
-## React Compiler
+- **Gustavo García**
+- **Nahuel Ghilardi Salinas**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tecnologías
 
-## Expanding the ESLint configuration
+- [React](https://react.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/)
+- [Axios](https://axios-http.com/) (peticiones HTTP a la API)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Requisitos previos
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js **22.13 o superior**
+- npm
+- El **backend** del proyecto funcionando en `http://localhost:3000` (ver su README)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Instalación
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clonar el repositorio:
 
+   ```bash
+   git clone <url-del-repositorio>
+   cd frontend
+   ```
+
+2. Instalar dependencias:
+
+   ```bash
+   npm install
+   ```
+
+## Ejecución
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+La aplicación queda disponible en `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+> El backend debe estar encendido antes de abrir el frontend; de lo contrario, no se cargarán los datos.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Conexión con el backend
+
+La URL de la API se configura en un único lugar, `src/api.ts`:
+
+```typescript
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://localhost:3000',
+});
+
+export default api;
+```
+
+Si el backend cambia de dirección (por ejemplo, al publicarlo en un servidor), solo hay que modificar `baseURL`.
+
+## Tipos de datos
+
+Las interfaces de `src/types.ts` describen la forma de los datos que devuelve la API:
+
+- **Categoria**: id, nombre, descripcion (opcional)
+- **Medicamento**: id, nombre, laboratorio, precio, stock y su categoría
+- **Empleado**: id, nombre, apellido, cargo, dni
+
+> **Precio:** la API devuelve el precio de los medicamentos como texto (por ejemplo `"1500.00"`). Por eso en la interfaz está tipado como `string` y se convierte con `Number()` cuando hace falta operar o darle formato. Al crear o editar un medicamento, el precio debe enviarse como número.
+
+## Estructura del proyecto
 
 ```
+src/
+├── api.ts        # configuración de Axios (URL del backend)
+├── types.ts      # interfaces de Categoria, Medicamento y Empleado
+├── App.tsx       # componente principal
+└── main.tsx      # punto de entrada
+```
+
+## Estado del proyecto
+
+- [x] Conexión con la API
+- [x] Tipos de datos
+- [ ] Vista de medicamentos (listado y alta)
+- [ ] Vista de categorías
+- [ ] Vista de empleados
