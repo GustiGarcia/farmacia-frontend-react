@@ -77,16 +77,20 @@ Las interfaces de `src/types.ts` describen la forma de los datos que devuelve la
 
 ```
 src/
-├── api.ts        # configuración de Axios (URL del backend)
-├── types.ts      # interfaces de Categoria, Medicamento y Empleado
-├── App.tsx       # componente principal
-└── main.tsx      # punto de entrada
+├── api.ts                      # configuración de Axios (URL del backend)
+├── types.ts                    # interfaces de Categoria, Medicamento y Empleado
+├── App.tsx                     # componente principal y navegación entre vistas
+├── main.tsx                    # punto de entrada
+└── components/
+    ├── Medicamentos.tsx        # listado y alta de medicamentos
+    ├── Categorias.tsx          # listado de categorías
+    └── Empleados.tsx           # listado de empleados
 ```
 
 ## Estado del proyecto
 
 - [x] Conexión con la API
 - [x] Tipos de datos
-- [ ] Vista de medicamentos (listado y alta)
-- [ ] Vista de categorías
-- [ ] Vista de empleados
+- [x] Vista de medicamentos (listado y alta)
+- [x] Vista de categorías
+- [x] Vista de empleados
