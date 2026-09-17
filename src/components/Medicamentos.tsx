@@ -40,7 +40,7 @@ function Medicamentos() {
       laboratorio,
       precio: Number(precio),
       stock: Number(stock),
-      categoriaId: Number(categoriaId),
+      categoria: { id: Number(categoriaId) },
     };
 
     api
@@ -86,7 +86,7 @@ function Medicamentos() {
           <input
             id="precio"
             type="number"
-            min="0"
+            min="0.01"
             step="0.01"
             value={precio}
             onChange={(e) => setPrecio(e.target.value)}
