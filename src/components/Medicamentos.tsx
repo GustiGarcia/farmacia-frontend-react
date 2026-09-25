@@ -14,6 +14,8 @@ function Medicamentos() {
   const [precio, setPrecio] = useState("");
   const [stock, setStock] = useState("");
   const [categoriaId, setCategoriaId] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
 
   useEffect(() => {
     cargarMedicamentos();
@@ -37,7 +39,9 @@ function Medicamentos() {
 
     const nuevo = {
       nombre,
+      descripcion,
       laboratorio,
+      fechaVencimiento,
       precio: Number(precio),
       stock: Number(stock),
       categoria: { id: Number(categoriaId) },
@@ -51,9 +55,20 @@ function Medicamentos() {
         setPrecio("");
         setStock("");
         setCategoriaId("");
+        setDescripcion("");
+        setFechaVencimiento("");
         cargarMedicamentos();
       })
       .catch(() => setError("No se pudo guardar el medicamento."));
+  }
+
+  function handleEliminar(id: number) {
+    if (!confirm("¿Seguro que querés eliminar este medicamento?")) return;
+
+    api
+      .delete(`/medicamento/${id}`)
+      .then(() => cargarMedicamentos())
+      .catch(() => setError("No se pudo eliminar el medicamento."));
   }
 
   if (cargando) return <p className="estado">Cargando medicamentos...</p>;
@@ -79,6 +94,24 @@ function Medicamentos() {
             value={laboratorio}
             onChange={(e) => setLaboratorio(e.target.value)}
             required
+          />
+        </div>
+        <div className="campo">
+          <label htmlFor="fechaVencimiento">Fecha de vencimiento</label>
+          <input
+            id="fechaVencimiento"
+            type="date"
+            value={fechaVencimiento}
+            onChange={(e) => setFechaVencimiento(e.target.value)}
+            required
+          />
+        </div>
+        <div className="campo">
+          <label htmlFor="descripcion">Descripción</label>
+          <input
+            id="descripcion"
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
           />
         </div>
         <div className="campo">
@@ -135,6 +168,7 @@ function Medicamentos() {
             <th>Categoría</th>
             <th>Precio</th>
             <th>Stock</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -145,6 +179,14 @@ function Medicamentos() {
               <td>{med.categoria?.nombre}</td>
               <td>${Number(med.precio).toFixed(2)}</td>
               <td>{med.stock}</td>
+              <td>
+                <button
+                  onClick={() => handleEliminar(med.id)}
+                  className="eliminar"
+                >
+                  Eliminar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
