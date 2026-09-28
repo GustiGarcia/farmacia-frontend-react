@@ -16,6 +16,7 @@ function Medicamentos() {
   const [categoriaId, setCategoriaId] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   useEffect(() => {
     cargarMedicamentos();
@@ -37,7 +38,7 @@ function Medicamentos() {
     e.preventDefault();
     setError("");
 
-    const nuevo = {
+    const datos = {
       nombre,
       descripcion,
       laboratorio,
@@ -47,8 +48,11 @@ function Medicamentos() {
       categoria: { id: Number(categoriaId) },
     };
 
-    api
-      .post("/medicamento", nuevo)
+    const peticion = editandoId
+      ? api.patch(`/medicamento/${editandoId}`, datos)
+      : api.post("/medicamento", datos);
+
+    peticion
       .then(() => {
         setNombre("");
         setLaboratorio("");
@@ -57,6 +61,7 @@ function Medicamentos() {
         setCategoriaId("");
         setDescripcion("");
         setFechaVencimiento("");
+        setEditandoId(null);
         cargarMedicamentos();
       })
       .catch(() => setError("No se pudo guardar el medicamento."));
@@ -69,6 +74,17 @@ function Medicamentos() {
       .delete(`/medicamento/${id}`)
       .then(() => cargarMedicamentos())
       .catch(() => setError("No se pudo eliminar el medicamento."));
+  }
+
+  function handleEditar(med: Medicamento) {
+    setNombre(med.nombre);
+    setDescripcion(med.descripcion ?? "");
+    setLaboratorio(med.laboratorio);
+    setFechaVencimiento(med.fechaVencimiento);
+    setPrecio(String(med.precio));
+    setStock(String(med.stock));
+    setCategoriaId(String(med.categoria.id));
+    setEditandoId(med.id);
   }
 
   if (cargando) return <p className="estado">Cargando medicamentos...</p>;
@@ -154,7 +170,7 @@ function Medicamentos() {
           </select>
         </div>
         <button type="submit" className="guardar">
-          Guardar
+          {editandoId ? "Actualizar" : "Guardar"}
         </button>
       </form>
 
@@ -180,6 +196,12 @@ function Medicamentos() {
               <td>${Number(med.precio).toFixed(2)}</td>
               <td>{med.stock}</td>
               <td>
+                <button
+                  onClick={() => handleEditar(med)}
+                  className="editar"
+                >
+                  Editar
+                </button>
                 <button
                   onClick={() => handleEliminar(med.id)}
                   className="eliminar"
