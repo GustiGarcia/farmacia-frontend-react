@@ -183,7 +183,7 @@ function Empleados() {
                 <button
                   onClick={()=>handleEditar(emp)}
                   className="editar">
-                  editar
+                  Editar
                 </button>
                 <button
                   onClick={() => handleEliminar(emp.id)}

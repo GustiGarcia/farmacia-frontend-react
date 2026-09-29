@@ -100,7 +100,7 @@ function Categorias() {
               <td>{cat.descripcion ?? "-"}</td>
               <td>
                 <button onClick={() => handleEditar(cat)} className="editar">
-                  editar
+                  Editar
                 </button>
                 <button
                   onClick={() => handleEliminar(cat.id)}
