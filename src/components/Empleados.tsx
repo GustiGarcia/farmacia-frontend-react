@@ -13,6 +13,7 @@ function Empleados() {
   const [cargo, setCargo] = useState("");
   const [dni, setDni] = useState("");
   const [fechaIngreso, setFechaIngreso] = useState("");
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   useEffect(() => {
     cargarEmpleados();
@@ -30,7 +31,7 @@ function Empleados() {
     e.preventDefault();
     setError("");
 
-    const nuevo = {
+    const datos = {
       nombre,
       apellido,
       email,
@@ -40,8 +41,11 @@ function Empleados() {
       fechaIngreso,
     };
 
-    api
-      .post("/empleado", nuevo)
+    const peticion = editandoId
+      ? api.patch(`/empleado/${editandoId}`, datos)
+      : api.post("/empleado", datos);
+
+    peticion
       .then(() => {
         setNombre("");
         setApellido("");
@@ -62,6 +66,17 @@ function Empleados() {
       .delete(`/empleado/${id}`)
       .then(() => cargarEmpleados())
       .catch(() => setError("No se pudo eliminar el empleado."));
+  }
+
+  function handleEditar(emp: Empleado) {
+    setNombre(emp.nombre);
+    setApellido(emp.apellido);
+    setEmail(emp.email);
+    setTelefono(emp.telefono);
+    setCargo(emp.cargo);
+    setDni(emp.dni);
+    setFechaIngreso((emp.fechaIngreso));
+    setEditandoId(emp.id);
   }
 
   if (cargando) return <p className="estado">Cargando empleados...</p>;
@@ -166,6 +181,11 @@ function Empleados() {
               <td>{emp.fechaIngreso}</td>
               <td>
                 <button
+                  onClick={()=>handleEditar(emp)}
+                  className="editar">
+                  editar
+                </button>
+                <button
                   onClick={() => handleEliminar(emp.id)}
                   className="eliminar"
                 >
@@ -180,4 +200,4 @@ function Empleados() {
   );
 }
 
-export default Empleados; 
+export default Empleados;

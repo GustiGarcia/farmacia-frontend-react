@@ -8,6 +8,7 @@ function Categorias() {
   const [error, setError] = useState("");
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
+  const [editandoId, setEditandoId] = useState<number | null>(null);
 
   useEffect(() => {
     cargarCategorias();
@@ -27,8 +28,11 @@ function Categorias() {
 
     const nueva = { nombre, descripcion };
 
-    api
-      .post("/categoria", nueva)
+    const peticion = editandoId
+      ? api.patch(`/categoria/${editandoId}`, nueva)
+      : api.post("/categoria", nueva);
+
+    peticion
       .then(() => {
         setNombre("");
         setDescripcion("");
@@ -44,6 +48,12 @@ function Categorias() {
       .delete(`/categoria/${id}`)
       .then(() => cargarCategorias())
       .catch(() => setError("No se pudo eliminar la categoría."));
+  }
+
+  function handleEditar(cat: Categoria) {
+    setNombre(cat.nombre);
+    setDescripcion(cat.descripcion);
+    setEditandoId(cat.id);
   }
 
   if (cargando) return <p className="estado">Cargando categorías...</p>;
@@ -89,6 +99,9 @@ function Categorias() {
               <td>{cat.nombre}</td>
               <td>{cat.descripcion ?? "-"}</td>
               <td>
+                <button onClick={() => handleEditar(cat)} className="editar">
+                  editar
+                </button>
                 <button
                   onClick={() => handleEliminar(cat.id)}
                   className="eliminar"
