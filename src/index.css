@@ -197,3 +197,42 @@ button.guardar:hover {
   margin: 0.5rem 0 0;
   padding-left: 1.2rem;
 }
+
+.login {
+  max-width: 350px;
+  margin: 3rem auto;
+}
+
+.enlace {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  font-size: inherit;
+}
+
+.cambiar-modo {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.barra-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cerrar-sesion {
+  background: #2e7d32;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cerrar-sesion:hover {
+  background: #1b5e20;
+}
