@@ -15,6 +15,7 @@ Trabajo práctico de **Programación 3** — IES 9-023.
 - [TypeScript](https://www.typescriptlang.org/)
 - [Vite](https://vite.dev/)
 - [Axios](https://axios-http.com/) (peticiones HTTP a la API, con token JWT)
+- [Recharts](https://recharts.org/) (gráfico del dashboard)
 
 ## Requisitos previos
 
@@ -61,6 +62,8 @@ Usuario de prueba (si se cargó durante el desarrollo):
 
 Al iniciar sesión, el frontend guarda un token JWT en el navegador y lo envía automáticamente en cada petición a la API. El botón **"Cerrar sesión"**, arriba a la derecha, borra ese token y vuelve a la pantalla de login.
 
+> El token vence al día. Si al abrir la app los datos no cargan, cerrá sesión y volvé a iniciar sesión para obtener un token nuevo.
+
 ## Conexión con el backend
 
 La URL de la API y el envío automático del token se configuran en `src/api.ts`:
@@ -90,8 +93,12 @@ Si el backend cambia de dirección, solo hay que modificar `baseURL`.
 
 La aplicación cuenta con navegación entre las siguientes pantallas:
 
-- **Dashboard** — resumen con los totales de medicamentos, categorías y empleados, y un panel de medicamentos con stock bajo.
-- **Medicamentos** — CRUD completo (crear, listar, editar, eliminar): nombre, descripción, laboratorio, fecha de vencimiento, precio, stock y categoría asociada.
+- **Dashboard** — resumen con:
+  - Totales de medicamentos, categorías y empleados (tarjetas).
+  - Panel de medicamentos con **stock bajo**.
+  - Panel de medicamentos **próximos a vencer** (30 días).
+  - **Gráfico** de stock por categoría (Recharts).
+- **Medicamentos** — CRUD completo (crear, listar, editar, eliminar) con **buscador** por nombre: nombre, descripción, laboratorio, fecha de vencimiento, precio, stock y categoría asociada.
 - **Categorías** — CRUD completo: nombre y descripción.
 - **Empleados** — CRUD completo: nombre, apellido, email, teléfono, cargo, DNI y fecha de ingreso.
 
@@ -120,8 +127,8 @@ src/
 ├── index.css                 # estilos globales
 └── components/
     ├── Login.tsx             # inicio de sesión y registro
-    ├── Dashboard.tsx
-    ├── Medicamentos.tsx
-    ├── Categorias.tsx
-    └── Empleados.tsx
+    ├── Dashboard.tsx         # totales, alertas y gráfico
+    ├── Medicamentos.tsx      # CRUD + buscador
+    ├── Categorias.tsx        # CRUD
+    └── Empleados.tsx         # CRUD
 ```
