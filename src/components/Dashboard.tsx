@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import type { Categoria, Empleado, Medicamento } from "../types";
-
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 function Dashboard() {
   const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
@@ -24,6 +32,12 @@ function Dashboard() {
     return vencimiento <= en30dias;
   });
 
+  const datosGrafico = categorias.map((cat) => ({
+    nombre: cat.nombre,
+    stock: medicamentos
+      .filter((med) => med.categoria?.id === cat.id)
+      .reduce((total, med) => total + med.stock, 0),
+  }));
   return (
     <section>
       <h2>Dashboard</h2>
@@ -71,6 +85,19 @@ function Dashboard() {
             </ul>
           )}
         </div>
+      </div>
+
+      <div className="grafico">
+        <h3>Stock por categoria</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <LineChart data={datosGrafico}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="nombre" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Line type="monotone" dataKey="stock" stroke="#2e7d32" />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </section>
   );
