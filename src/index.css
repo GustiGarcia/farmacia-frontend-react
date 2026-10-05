@@ -236,3 +236,31 @@ button.guardar:hover {
 .cerrar-sesion:hover {
   background: #1b5e20;
 }
+.buscador {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 0.9rem;
+  width: 100%;
+  max-width: 320px;
+  border: 3px solid #105009;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.buscador:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.15);
+}
+
+.paneles {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.paneles .panel-alerta {
+  flex: 1;
+  min-width: 250px;
+}

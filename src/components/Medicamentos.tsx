@@ -17,6 +17,7 @@ function Medicamentos() {
   const [descripcion, setDescripcion] = useState("");
   const [fechaVencimiento, setFechaVencimiento] = useState("");
   const [editandoId, setEditandoId] = useState<number | null>(null);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     cargarMedicamentos();
@@ -88,6 +89,10 @@ function Medicamentos() {
   }
 
   if (cargando) return <p className="estado">Cargando medicamentos...</p>;
+
+  const medicamentosFiltrados = medicamentos.filter((med) =>
+    med.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
 
   return (
     <section>
@@ -176,6 +181,14 @@ function Medicamentos() {
 
       {error && <p className="estado error">{error}</p>}
 
+      <input
+        type="text"
+        placeholder="Buscar medicamento..."
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        className="buscador"
+      />
+
       <table>
         <thead>
           <tr>
@@ -188,7 +201,7 @@ function Medicamentos() {
           </tr>
         </thead>
         <tbody>
-          {medicamentos.map((med) => (
+          {medicamentosFiltrados.map((med) => (
             <tr key={med.id}>
               <td>{med.nombre}</td>
               <td>{med.laboratorio}</td>
@@ -196,10 +209,7 @@ function Medicamentos() {
               <td>${Number(med.precio).toFixed(2)}</td>
               <td>{med.stock}</td>
               <td>
-                <button
-                  onClick={() => handleEditar(med)}
-                  className="editar"
-                >
+                <button onClick={() => handleEditar(med)} className="editar">
                   Editar
                 </button>
                 <button

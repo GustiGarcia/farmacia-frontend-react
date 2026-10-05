@@ -15,6 +15,14 @@ function Dashboard() {
     api.get<Categoria[]>("/categoria").then((res) => setCategorias(res.data));
     api.get<Empleado[]>("/empleado").then((res) => setEmpleados(res.data));
   }, []);
+  const hoy = new Date();
+  const en30dias = new Date();
+  en30dias.setDate(hoy.getDate() + 30);
+
+  const porVencer = medicamentos.filter((med) => {
+    const vencimiento = new Date(med.fechaVencimiento);
+    return vencimiento <= en30dias;
+  });
 
   return (
     <section>
@@ -34,19 +42,35 @@ function Dashboard() {
           <span className="etiqueta">Empleados</span>
         </div>
       </div>
-      <div className="panel-alerta">
-        <h3>Stock bajo</h3>
-        {stockBajo.length === 0 ? (
-          <p>No hay medicamentos con stock bajo.</p>
-        ) : (
-          <ul>
-            {stockBajo.map((med) => (
-              <li key={med.id}>
-                {med.nombre} — quedan {med.stock} unidades
-              </li>
-            ))}
-          </ul>
-        )}
+      <div className="paneles">
+        <div className="panel-alerta">
+          <h3>Stock bajo</h3>
+          {stockBajo.length === 0 ? (
+            <p>No hay medicamentos con stock bajo.</p>
+          ) : (
+            <ul>
+              {stockBajo.map((med) => (
+                <li key={med.id}>
+                  {med.nombre} — quedan {med.stock} unidades
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="panel-alerta">
+          <h3>Próximos a vencer (30 días)</h3>
+          {porVencer.length === 0 ? (
+            <p>No hay medicamentos próximos a vencer.</p>
+          ) : (
+            <ul>
+              {porVencer.map((med) => (
+                <li key={med.id}>
+                  {med.nombre} — vence el {med.fechaVencimiento}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   );
